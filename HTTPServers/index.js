@@ -10,13 +10,17 @@ callBack fnc (optional);
  */
 const http = require('http');
 const fs = require('fs');
+const url = require('url');
 
 const server = http.createServer((req, res) => {
     // console.log("New req received");
     // console.log(req.headers);
+    const myurl = url.parse(req.url);
+    console.log(myurl);
     const log = `${Date.now()}: ${req.url} : New request received\n`;
+    if (req.url == "/favicon.ico") return res.end();
     fs.appendFile('./log.txt', log, (err, data) => {
-        switch (req.url) {
+        switch (myurl.pathname) {
             case "/": res.end("Homepage");
                 break;
             case "/about": res.end("I am GRASiN");
