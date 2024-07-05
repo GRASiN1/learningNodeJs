@@ -1,8 +1,12 @@
 const express = require('express')
 const app = express()
 const port = 3000
+const fs = require('fs');
 
-const users = require('./MOCK_DATA.json');
+let users = require('./MOCK_DATA.json');
+
+//middleware
+app.use(express.urlencoded({ extended: false }));
 
 //Routes
 // if someone try this route on browser we should return html doc
@@ -22,18 +26,52 @@ app.get('/api/users', (req, res) => {
 app.get('/api/user/:id', (req, res) => {
     const id = Number(req.params.id);
     const user = users.find(user => user.id === id);
+    if (!user) return res.json({ status: "User not found" });
     return res.json(user);
 })
 
 app.post('/api/user', (req, res) => {
-    res.json({ status: "pending" });
+    const body = req.body;
+    users.push({ id: users.length + 1, ...body });
+    fs.writeFile('./MOCK_DATA.json', JSON.stringify(users), (err, data) => {
+        if (err) res.json({ error: `${err}` });
+        else res.json({ status: "User created" });
+    })
 })
 
 app.patch('/api/user/:id', (req, res) => {
-    res.json({ status: "pending" });
+    const id = Number(req.params.id);
+    const body = req.body;
+    let userIndex = users.findIndex(user => user.id === id);
+
+    if (userIndex === -1) {
+        return res.json({ status: "User not found" });
+    }
+    users[userIndex] = { ...users[userIndex], ...body };
+    fs.writeFile('./MOCK_DATA.json', JSON.stringify(users, null, 2), (err) => {
+        if (err) {
+            return res.json({ error: `${err}` });
+        } else {
+            return res.json({ status: "User updated" });
+        }
+    });
 })
 app.delete('/api/user/:id', (req, res) => {
-    res.json({ status: "pending" });
+    const id = Number(req.params.id);
+    const userIndex = users.findIndex(user => user.id === id);
+
+    if (userIndex === -1) {
+        return res.json({ status: "User not found" });
+    }
+    users.splice(userIndex, 1);
+    fs.writeFile('./MOCK_DATA.json', JSON.stringify(users, null, 2), (err) => {
+        if (err) {
+            return res.json({ status: "Error occurred" });
+        } else {
+            return res.json({ status: "User deleted" });
+        }
+    });
+
 })
 
 // you can also write multiple fucntionalities on a single route like this
