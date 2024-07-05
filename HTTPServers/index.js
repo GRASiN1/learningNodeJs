@@ -9,27 +9,45 @@ port number - the port we want to listen to;
 callBack fnc (optional);
  */
 const http = require('http');
-const fs = require('fs');
-const url = require('url');
+// const fs = require('fs');
+// const url = require('url');
+const express = require('express');
 
-const server = http.createServer((req, res) => {
-    // console.log("New req received");
-    // console.log(req.headers);
-    const myurl = url.parse(req.url);
-    console.log(myurl);
-    const log = `${Date.now()}: ${req.url} : New request received\n`;
-    if (req.url == "/favicon.ico") return res.end();
-    fs.appendFile('./log.txt', log, (err, data) => {
-        switch (myurl.pathname) {
-            case "/": res.end("Homepage");
-                break;
-            case "/about": res.end("I am GRASiN");
-                break;
-            default: res.end("404 Not found");
-        }
-    });
-});
+const app = express();
 
-server.listen(8000, () => {
+app.get("/", (req, res) => {
+    res.end("Hello from homepage");
+})
+
+app.get("/about", (req, res) => {
+    res.end("Hello from about page");
+})
+
+// function handler(req, res) {
+//     // console.log("New req received");
+//     // console.log(req.headers);
+//     const myurl = url.parse(req.url);
+//     console.log(myurl);
+//     const log = `${Date.now()}: ${req.url} : New request received\n`;
+//     if (req.url == "/favicon.ico") return res.end();
+//     fs.appendFile('./log.txt', log, (err, data) => {
+//         switch (myurl.pathname) {
+//             case "/": res.end("Homepage");
+//                 break;
+//             case "/about": res.end("I am GRASiN");
+//                 break;
+//             default: res.end("404 Not found");
+//         }
+//     });
+// }
+// const server = http.createServer(handler);
+// const server = http.createServer(app);
+
+
+// server.listen(8000, () => {
+//     console.log("Server started");
+// });
+
+app.listen(8000, () => {
     console.log("Server started");
-});
+})
