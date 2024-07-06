@@ -39,6 +39,9 @@ app.use((req, res, next) => {
 // })
 
 app.get('/api/users', (req, res) => {
+    // res.setHeader("MyName", "GRASiN");
+    // it is a good practice to append 'X-' in the name of custom headers;
+    res.setHeader("X-MyName", "GRASiN");
     res.json(users);
 });
 
