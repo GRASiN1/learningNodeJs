@@ -8,6 +8,25 @@ let users = require('./MOCK_DATA.json');
 //middleware
 app.use(express.urlencoded({ extended: false }));
 
+// app.use((req, res, next) => {
+//     console.log("Hello from middleware 1");
+//     next();
+// })
+
+// app.use((req, res, next) => {
+//     console.log("Hello from middleware 2");
+//     // res.end("Hey");
+//     next();
+// })
+
+app.use((req, res, next) => {
+    const log = `\nNew Req at : ${Date.now()} | ${req.method} | ${req.path}`;
+    fs.appendFile('./log.txt', log, (err, data) => {
+        if (err) return res.send(err);
+    })
+    next();
+})
+
 //Routes
 // if someone try this route on browser we should return html doc
 // app.get('/users', (req, res) => {
