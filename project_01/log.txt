@@ -2,3 +2,4 @@ New Req at : 1720278375430 | GET | /api/users
 New Req at : 1720278427645 | GET | /api/users
 New Req at : 1720278993350 | GET | /api/users
 New Req at : 1720281097118 | POST | /api/user
+New Req at : 1720423156519 | GET | /api/users
