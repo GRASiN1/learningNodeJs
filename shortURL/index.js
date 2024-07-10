@@ -1,9 +1,13 @@
 //imports
 const express = require('express');
-const urlRouter = require('./routes/url');
 const connection = require('./connection');
-const staticRouter = require('./routes/staticRoutes');
 const path = require('path');
+const cookieParser = require('cookie-parser');
+
+const { restrictToLoggedInUserOnly, checkAuth } = require('./middleware/auth');
+const urlRouter = require('./routes/url');
+const userRouter = require('./routes/user');
+const staticRouter = require('./routes/staticRoutes');
 
 //variables
 const app = express();
@@ -17,11 +21,12 @@ app.set('views', path.resolve('./views'));
 
 //middlewares
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 
 //routes
-app.use('/url', urlRouter);
-app.use('/', staticRouter);
-
+app.use('/url', restrictToLoggedInUserOnly, urlRouter);
+app.use('/user', userRouter);
+app.use('/', checkAuth, staticRouter);
 
 app.listen(port, () => {
     console.log(`Server running at : http://localhost:${port}`);
