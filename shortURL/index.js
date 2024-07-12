@@ -4,7 +4,8 @@ const connection = require('./connection');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 
-const { restrictToLoggedInUserOnly, checkAuth } = require('./middleware/auth');
+// const { restrictToLoggedInUserOnly, checkAuth } = require('./middleware/auth');
+const { checkForAuthentication, restrictTo } = require('./middleware/auth');
 const urlRouter = require('./routes/url');
 const userRouter = require('./routes/user');
 const staticRouter = require('./routes/staticRoutes');
@@ -22,11 +23,12 @@ app.set('views', path.resolve('./views'));
 //middlewares
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(checkForAuthentication);
 
 //routes
-app.use('/url', restrictToLoggedInUserOnly, urlRouter);
+app.use('/url', restrictTo(['NORMAL']), urlRouter);
 app.use('/user', userRouter);
-app.use('/', checkAuth, staticRouter);
+app.use('/', staticRouter);
 
 app.listen(port, () => {
     console.log(`Server running at : http://localhost:${port}`);
