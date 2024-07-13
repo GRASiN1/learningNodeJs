@@ -7,12 +7,12 @@ const commands = [
     },
 ];
 
-const rest = new REST({ version: '10' }).setToken("MTIyNTgyMTIxODY4MzIyODI1Mg.GRcfFh.rZTEM1TijtshaDLw5bxsUndVTcf2sSKV5GBdCA");
+const rest = new REST({ version: '10' }).setToken('causing problem so had to hide');
 (async () => {
     try {
         console.log('Started refreshing application (/) commands.');
 
-        await rest.put(Routes.applicationCommands("1225821218683228252"), { body: commands });
+        await rest.put(Routes.applicationCommands('causing problem so had to hide'), { body: commands });
 
         console.log('Successfully reloaded application (/) commands.');
     } catch (error) {

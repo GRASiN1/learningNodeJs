@@ -11,4 +11,4 @@ client.on('interactionCreate', (interaction) => {
     interaction.reply('Pong');
 })
 
-client.login('MTIyNTgyMTIxODY4MzIyODI1Mg.GRcfFh.rZTEM1TijtshaDLw5bxsUndVTcf2sSKV5GBdCA');
+client.login('causing problem so had to hide');
